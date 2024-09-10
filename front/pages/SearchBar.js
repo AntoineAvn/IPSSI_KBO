@@ -14,9 +14,6 @@ const SearchBar = ({ searchQuery, setSearchQuery, handleSearch, placeholder = "R
         onSubmitEditing={handleSearch}
         returnKeyType="search"
       />
-      {/* <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-        <Icon name="search" size={20} color="#fff" />
-      </TouchableOpacity> */}
     </View>
   );
 };
