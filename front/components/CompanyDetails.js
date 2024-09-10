@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Keyboard, StyleSheet } from 'react-native';
-import SearchBar from './SearchBar'; // Importation de la SearchBar
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Keyboard,
+  StyleSheet,
+} from "react-native";
+import SearchBar from "../pages/SearchBar"; // Importation de la SearchBar
 
 export default function CompanyDetails({ route, navigation }) {
   const { company } = route.params;
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
-    if (searchQuery.trim() !== '') {
+    if (searchQuery.trim() !== "") {
       Keyboard.dismiss();
-      navigation.navigate('SearchResults', { query: searchQuery });
+      navigation.navigate("SearchResults", { query: searchQuery });
     }
   };
 
@@ -56,21 +63,21 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   infoSection: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -78,8 +85,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#007bff',
+    fontWeight: "bold",
+    color: "#007bff",
     marginBottom: 15,
   },
   infoItem: {
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   infoLabel: {
-    fontWeight: 'bold',
-    color: '#555',
+    fontWeight: "bold",
+    color: "#555",
   },
 });
