@@ -1,10 +1,12 @@
+
+
 db.createUser({
-    user: "ata",
-    pwd: "ujJj7R2AKqeWeYxb3LWp",
+    user: process.env.USERNAME_DB,
+    pwd: process.env.PASSWORD_DB,
     roles: [
       {
         role: "readWrite",
-        db: "project_kbo"
+        db: process.env.DATABASE
       }
     ]
   });

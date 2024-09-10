@@ -5,9 +5,11 @@ services:
     image: mongo:6.0  # You can replace with the specific MongoDB version you need
     container_name: mongo_container
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${USERNAME_DB}
-      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD_DB}
+      - MONGO_INITDB_ROOT_USERNAME=${ROOT_USERNAME_DB}
+      - MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASSWORD_DB}
       - MONGO_INITDB_DATABASE=${DATABASE}
+      - MONGO_USER=${USERNAME_DB}
+      - MONGO_PASSWORD=${PASSWORD_DB}
     volumes:
       - mongo-data:/data/db  # Persistent storage for MongoDB
     ports:
