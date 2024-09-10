@@ -7,7 +7,7 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-import SearchBar from "../pages/SearchBar"; // Importation de la SearchBar
+import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 
 export default function CompanyDetails({ route, navigation }) {
   const { company } = route.params;

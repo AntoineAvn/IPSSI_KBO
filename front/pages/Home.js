@@ -8,8 +8,8 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-import Footer from "../pages/Footer"; // Importation du Footer
-import SearchBar from "../pages/SearchBar"; // Importation de la SearchBar
+import Footer from "../components/Footer"; // Importation du Footer
+import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 import { Image } from "react-native";
 
 export default function Home({ navigation }) {

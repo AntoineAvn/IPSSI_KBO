@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import SearchBar from "../pages/SearchBar"; // Importation de la SearchBar
+import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 
 const mockData = [
   {
