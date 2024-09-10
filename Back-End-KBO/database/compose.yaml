@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6.0  # You can replace with the specific MongoDB version you need
+    container_name: mongo_container
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${USERNAME_DB}
+      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD_DB}
+      - MONGO_INITDB_DATABASE=${DATABASE}
+    volumes:
+      - mongo-data:/data/db  # Persistent storage for MongoDB
+    ports:
+      - 27017:27017  # Exposing the default MongoDB port
+
+    # This command creates a user with a specific password for the database
+    command: >
+      mongod --auth --bind_ip_all
+    restart: always
+
+  mongo-seed:
+    image: mongo:6.0
+    container_name: mongo_seed_container
+    depends_on:
+      - mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: "no"
+
+volumes:
+  mongo-data:
+    driver: local
