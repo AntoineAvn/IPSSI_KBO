@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Keyboard, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Footer from './Footer';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Keyboard, StyleSheet } from 'react-native';
+import Footer from './Footer'; // Importation du Footer
+import SearchBar from './SearchBar'; // Importation de la SearchBar
+import { Image } from 'react-native';
 
 export default function Home({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,18 +34,13 @@ export default function Home({ navigation }) {
             <View style={styles.middle}>
               <Text style={styles.title}>Toute l'information des entreprises belges</Text>
 
-              {/* Barre de recherche avec icône */}
-              <View style={styles.searchContainer}>
-                <Icon name="search" size={20} color="#999" style={styles.searchIcon} />
-                <TextInput
-                  style={styles.searchBar}
-                  placeholder="Rechercher une entreprise..."
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                  onSubmitEditing={handleSearch}
-                  returnKeyType="search"
-                />
-              </View>
+              {/* Réutilisation du composant SearchBar */}
+              <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                handleSearch={handleSearch}
+                placeholder="Rechercher une entreprise..."
+              />
             </View>
           </View>
 
@@ -81,22 +77,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 5,
-    marginBottom: 20,
-  },
-  searchIcon: {
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  searchBar: {
-    flex: 1,
-    padding: 10,
   },
 });
