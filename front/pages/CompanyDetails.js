@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   Keyboard,
   StyleSheet,
 } from "react-native";
@@ -30,31 +29,107 @@ export default function CompanyDetails({ route, navigation }) {
         placeholder="Rechercher une entreprise..."
       />
 
-      <Text style={styles.title}>{company.name}</Text>
+      {/* Dénomination */}
+      <Text style={styles.title}>
+        {company.denomination?.Denomination || "Nom de l'entreprise indisponible"}
+      </Text>
 
+      {/* Informations générales */}
       <View style={styles.infoSection}>
         <Text style={styles.sectionTitle}>Informations générales</Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Numéro d'enregistrement: </Text>
-          {company.registrationNumber}
-        </Text>
-        <Text style={styles.infoItem}>
-          <Text style={styles.infoLabel}>Adresse: </Text>
-          {company.address}
+          {company.registrationNumber || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Forme légale: </Text>
-          {company.legalForm}
+          {company.legalForm || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Statut: </Text>
-          {company.status}
+          {company.status || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Date de création: </Text>
-          {company.creationDate}
+          {company.creationDate || "Non disponible"}
         </Text>
       </View>
+
+      {/* Adresse */}
+      {company.address && (
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Adresse</Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Rue: </Text>
+            {`${company.address.StreetFR || "Non disponible"} ${company.address.HouseNumber || ""}`}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Commune: </Text>
+            {company.address.MunicipalityFR || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Code Postal: </Text>
+            {company.address.Zipcode || "Non disponible"}
+          </Text>
+        </View>
+      )}
+
+      {/* Activité */}
+      {company.activity && (
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Activité</Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Groupe d'activité: </Text>
+            {company.activity.ActivityGroup || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Version NACE: </Text>
+            {company.activity.NaceVersion || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Code NACE: </Text>
+            {company.activity.NaceCode || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Classification: </Text>
+            {company.activity.Classification || "Non disponible"}
+          </Text>
+        </View>
+      )}
+
+      {/* Contact */}
+      {company.contact && (
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Contact</Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Type de contact: </Text>
+            {company.contact.ContactType || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Valeur du contact: </Text>
+            {company.contact.ContactValue || "Non disponible"}
+          </Text>
+        </View>
+      )}
+
+      {/* Branche */}
+      {company.branch && company.branch.address && (
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Adresse de la branche</Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Rue: </Text>
+            {`${company.branch.address.StreetFR || "Non disponible"} ${company.branch.address.HouseNumber || ""}`}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Commune: </Text>
+            {company.branch.address.MunicipalityFR || "Non disponible"}
+          </Text>
+          <Text style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Code Postal: </Text>
+            {company.branch.address.Zipcode || "Non disponible"}
+          </Text>
+        </View>
+      )}
     </ScrollView>
   );
 }

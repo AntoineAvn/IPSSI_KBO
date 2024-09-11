@@ -13,20 +13,94 @@ const mockData = [
     id: "1",
     name: "Uber",
     registrationNumber: "123456",
-    address: "123 Rue de Paris, Bruxelles",
     legalForm: "SA",
     status: "Actif",
     creationDate: "2010-01-01",
+    activity: {
+      ActivityGroup: "001",
+      NaceVersion: "2003",
+      NaceCode: "45450",
+      Classification: "SECO"
+    },
+    address: {
+      StreetFR: "Rue de Paris",
+      HouseNumber: "123",
+      Zipcode: "1000",
+      MunicipalityFR: "Bruxelles",
+    },
+    denomination: {
+      Denomination: "Uber Belgium",
+    },
+    contact: {
+      ContactType: "EMAIL",
+      ContactValue: "contact@uber.com"
+    },
+    branch: {
+      address: {
+        StreetFR: "Avenue Louise",
+        HouseNumber: "456",
+        Zipcode: "1000",
+        MunicipalityFR: "Bruxelles"
+      }
+    }
   },
   {
     id: "2",
     name: "Uber Eats",
     registrationNumber: "654321",
-    address: "456 Avenue Louise, Bruxelles",
     legalForm: "SRL",
     status: "Actif",
     creationDate: "2015-05-15",
-  },
+    activity: {
+      ActivityGroup: "001",
+      NaceVersion: "2008",
+      NaceCode: "56100",
+      Classification: "MAIN"
+    },
+    address: {
+      StreetFR: "Rue des Scyoux",
+      HouseNumber: "20",
+      Zipcode: "5361",
+      MunicipalityFR: "Hamois",
+    },
+    denomination: {
+      Denomination: "Uber Eats Belgium",
+    },
+    contact: {
+      ContactType: "EMAIL",
+      ContactValue: "contact@ubereats.com"
+    },
+    establishment: {
+      "2.004.335.348": {
+        activity: [
+          {
+            ActivityGroup: "006",
+            NaceVersion: "2008",
+            NaceCode: "36000",
+            Classification: "MAIN"
+          }
+        ],
+        address: {
+          StreetFR: "Rue des Scyoux",
+          HouseNumber: "20",
+          Zipcode: "5361",
+          MunicipalityFR: "Hamois"
+        },
+        denomination: {
+          Denomination: "Uber Eats Establishment"
+        },
+        StartDate: "01-04-1949"
+      }
+    },
+    branch: {
+      address: {
+        StreetFR: "Rue des Scyoux",
+        HouseNumber: "20",
+        Zipcode: "5361",
+        MunicipalityFR: "Hamois"
+      }
+    }
+  }
 ];
 
 export default function SearchResults({ route, navigation }) {
@@ -74,10 +148,13 @@ export default function SearchResults({ route, navigation }) {
                 <Text style={styles.label}>Numéro d'enregistrement: </Text>
                 {item.registrationNumber}
               </Text>
+
+              {/* Adresser chaque champ de l'adresse séparément */}
               <Text style={styles.cardText}>
                 <Text style={styles.label}>Adresse: </Text>
-                {item.address}
+                {`${item.address.StreetFR}, ${item.address.HouseNumber}, ${item.address.MunicipalityFR}, ${item.address.Zipcode}`}
               </Text>
+
               <Text style={styles.cardText}>
                 <Text style={styles.label}>Forme légale: </Text>
                 {item.legalForm}
