@@ -17,14 +17,8 @@ services:
 
   # MongoDB database service definition
   db:
-    image: mongo:6.0  # You can replace this with the specific MongoDB version you need
+    image: mongo  # You can replace this with the specific MongoDB version you need
     container_name: mongo_container
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${ROOT_USERNAME_DB}
-      - MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASSWORD_DB}
-      - MONGO_INITDB_DATABASE=${DATABASE}
-      - MONGO_USER=${USERNAME_DB}
-      - MONGO_PASSWORD=${PASSWORD_DB}
     volumes:
       - mongo-data:/data/db  # Persistent storage for MongoDB
     networks: 
@@ -42,24 +36,10 @@ services:
       timeout: 5s
       retries: 5
 
-  # MongoDB seed service to initialize the database
-  mongo-seed:
-    image: mongo:6.0
-    networks: 
-      - docker-project
-    container_name: mongo_seed_container
-    depends_on:
-      - db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${ROOT_USERNAME_DB}
-      - MONGO_INITDB_ROOT_PASSWORD=${ROOT_PASSWORD_DB}
-    volumes:
-      - ./database/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-    restart: always
-
 # Volumes for persisting data
 volumes:
   mongo-data:
+
 networks:
   docker-project:
     driver: bridge
