@@ -9,17 +9,18 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-import Footer from "../components/Footer"; // Importation du Footer
+// import Footer from "../components/Footer"; // Importation du Footer
 import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 import { Image } from "react-native";
 
 export default function Home({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [dynamicText, setDynamicText] = useState("nom de l'entreprise");
+  const [keyboardHeight, setKeyboardHeight] = useState(0); // Hauteur du clavier
+  const scrollViewRef = useRef(null); // Référence pour scroller automatiquement
 
-  // Animation de l'opacité et de la translation
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Valeur initiale de l'opacité
-  const translateY = useRef(new Animated.Value(-20)).current; // Valeur initiale de la position verticale
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(-20)).current;
 
   const handleSearch = () => {
     if (searchQuery.trim() !== "") {
@@ -28,18 +29,16 @@ export default function Home({ navigation }) {
     }
   };
 
-  // Gestion du texte dynamique et des animations qui changent toutes les 3 secondes
   useEffect(() => {
     const interval = setInterval(() => {
-      // Animation d'entrée pour le texte
       Animated.sequence([
         Animated.timing(fadeAnim, {
-          toValue: 0, // Diminuer l'opacité avant de changer le texte
+          toValue: 0,
           duration: 300,
           useNativeDriver: true,
         }),
         Animated.timing(translateY, {
-          toValue: -20, // Remonter le texte avant de changer
+          toValue: -20,
           duration: 0,
           useNativeDriver: true,
         }),
@@ -48,24 +47,40 @@ export default function Home({ navigation }) {
           prevText === "nom de l'entreprise" ? "N° d'entreprise" : "nom de l'entreprise"
         );
 
-        // Animation d'entrée pour le nouveau texte
         Animated.parallel([
           Animated.timing(fadeAnim, {
-            toValue: 1, // Réapparaître avec une opacité complète
+            toValue: 1,
             duration: 300,
             useNativeDriver: true,
           }),
           Animated.timing(translateY, {
-            toValue: 0, // Faire descendre le texte dans sa position normale
+            toValue: 0,
             duration: 300,
             useNativeDriver: true,
           }),
         ]).start();
       });
-    }, 3000); // Changement de texte toutes les 3 secondes
+    }, 3000);
 
-    return () => clearInterval(interval); // Nettoyage de l'intervalle
+    return () => clearInterval(interval);
   }, [fadeAnim, translateY]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height); // Capture la hauteur du clavier
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({ animated: true }); // Scroller vers le bas quand le clavier s'ouvre
+      }
+    });
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0); // Réinitialise la hauteur du clavier
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -74,43 +89,42 @@ export default function Home({ navigation }) {
     >
       <View style={styles.container}>
         <ScrollView
+          ref={scrollViewRef}
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "space-between",
+            paddingBottom: keyboardHeight + 100, // Ajustement manuel du padding
           }}
+          keyboardShouldPersistTaps="handled"
         >
           <View>
-            {/* Section avec le fond coloré et les bords arrondis */}
             <View style={styles.headerBackground}>
               <View style={styles.header}>
                 <Image
                   source={require("../assets/logo.png")}
                   style={styles.logo}
                 />
-                <Text style={styles.title}>Toute l'information des entreprises belges</Text>
+                <Text style={styles.title}>
+                  Toute l'information des entreprises belges
+                </Text>
               </View>
             </View>
 
-            {/* Texte au milieu */}
             <View style={styles.middle}>
               <Text style={styles.searchTitle}>
                 Recherchez les informations avec le
               </Text>
-
-              {/* Texte dynamique avec animation */}
               <Animated.Text
                 style={[
                   styles.highlightedText,
                   {
-                    opacity: fadeAnim, // Animer l'opacité
-                    transform: [{ translateY }], // Animer la translation verticale
+                    opacity: fadeAnim,
+                    transform: [{ translateY }],
                   },
                 ]}
               >
                 {dynamicText}
               </Animated.Text>
-
-              {/* Réutilisation du composant SearchBar */}
               <SearchBar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
@@ -119,9 +133,7 @@ export default function Home({ navigation }) {
               />
             </View>
           </View>
-
-          {/* Footer */}
-          <Footer />
+          {/* <Footer /> */}
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
@@ -134,10 +146,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   headerBackground: {
-    backgroundColor: "#107aca", // Couleur de fond
-    borderBottomLeftRadius: 40, // Bords arrondis en bas
+    backgroundColor: "#107aca",
+    borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    paddingBottom: 20, // Ajouter un peu d'espace pour bien voir les bords arrondis
+    paddingBottom: 20,
   },
   header: {
     justifyContent: "center",
@@ -150,6 +162,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   middle: {
+    marginTop: 30,
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -159,7 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     padding: 20,
-    color: "#fff", // Couleur du texte en blanc
+    color: "#fff",
   },
   searchTitle: {
     fontSize: 20,
