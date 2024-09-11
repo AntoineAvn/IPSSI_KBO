@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const SearchBar = ({ searchQuery, setSearchQuery, handleSearch, placeholder = "Rechercher..." }) => {
   return (
     <View style={styles.searchContainer}>
-      <Icon name="search" size={20} color="#107aca" style={styles.searchIcon} />
+      <Icon name="search" size={15} color="#107aca" style={styles.searchIcon} />
       <TextInput
         style={styles.searchBar}
         placeholder={placeholder}
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginRight: 10,
-    marginLeft: 5,
+    marginLeft: 15,
   },
   searchBar: {
     flex: 1,
