@@ -5,6 +5,8 @@ dotenv.config()
 
 const uri = process.env.URL_MONGO || ''
 
+console.log("lien bdd: ",uri)
+
 mongoose.connect(uri);
 
 const db = mongoose.connection;
