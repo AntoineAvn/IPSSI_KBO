@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "express": "^4.21.0",
+    "mongoose": "^8.6.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "back",
+  "version": "1.0.0",
+  "main": "data.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
