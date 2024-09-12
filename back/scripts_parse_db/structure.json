@@ -1,0 +1,121 @@
+{
+    "enterprise": [
+        {
+            "enterpriseNumber": "0200.065.765",
+            "denomination ": "Nom de l'entreprise",
+            "info": {
+                "Status": "",
+                "JuridicalSituation": "",
+                "TypeOfEnterprise": "",
+                "JuridicalForm": "",
+                "JuridicalFormCAC": "",
+                "StartDate": ""
+            },
+            "activity": [
+                {
+                "ActivityGroup": "",
+                "NaceVersion": "",
+                "NaceCode": "",
+                "Classification": ""
+                }
+            ],
+            "address": [
+                {
+                "TypeOfAddress": "",
+                "Zipcode": "",
+                "MunicipalityFR": "",
+                "StreetFR": "",
+                "HouseNumber": ""
+                }
+            ],
+            "denomination": [
+                {
+                "Language": "",
+                "TypeOfDenomination": "",
+                "Denomination": "" 
+                },
+                {
+                "Language": "",
+                "TypeOfDenomination": "",
+                "Denomination": ""
+                }
+            ],
+            "contact": [
+                {
+                "email": "",
+                "tel": "",
+                "web": ""
+                }
+            ],
+            "establishment": [
+                {
+                "establishmentNumber": "",
+                "StartDate": "",
+                "activity": [
+                    {
+                    "ActivityGroup": "",
+                    "NaceVersion": "",
+                    "NaceCode": "",
+                    "Classification": ""
+                    }
+                ],
+                "address": [
+                    {
+                        "FR" : {
+                            "TypeOfAddress": "",
+                            "Zipcode": "",
+                            "Municipality": "",
+                            "Street": "",
+                            "HouseNumber": ""
+                        },
+                        "NL" : {
+                            "TypeOfAddress": "",
+                            "Zipcode": "",
+                            "Municipality": "",
+                            "Street": "",
+                            "HouseNumber": ""
+                        }
+                    }
+                ],
+                "denomination": [
+                    {
+                        "Language": "",
+                        "TypeOfDenomination": "",
+                        "Denomination": ""
+                    },
+                    {
+                        "Language": "",
+                        "TypeOfDenomination": "",
+                        "Denomination": ""
+                    }
+                ], 
+                "contact": [
+                    {
+                        "email": "",
+                        "tel": "",
+                        "web": ""
+                    }
+                ]
+            }
+            ],
+            "branch": [
+            {
+                "address": "",
+                "denomination": [
+                    {
+                        "Language": "",
+                        "TypeOfDenomination": "",
+                        "Denomination": ""
+                    },
+                    {
+                        "Language": "",
+                        "TypeOfDenomination": "",
+                        "Denomination": ""
+                    }
+
+                ]
+            }
+            ]
+        }
+    ]
+}
