@@ -1,0 +1,21 @@
+  {
+    "dependencies": {
+      "@fastify/env": "3.0.0",
+      "@fastify/mongodb": "^5.0.0",
+      "@types/mongoose": "^5.11.97",
+      "dotenv": "^16.4.5",
+      "fastify": "^4.28.1",
+      "fastify-cli": "^6.3.0",
+      "mongoose": "^8.6.1",
+      "typescript": "^5.6.2"
+    },
+    "devDependencies": {
+      "@types/node": "^22.5.4",
+      "tsx": "^4.19.0"
+    },
+    "type": "module",
+    "scripts": {
+      "dev": "node dist/app.js",
+      "build": "tsc -p tsconfig.json"
+    }
+  }
