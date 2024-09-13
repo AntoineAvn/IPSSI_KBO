@@ -9,7 +9,6 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-// import Footer from "../components/Footer"; // Importation du Footer
 import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 import { Image } from "react-native";
 
@@ -19,8 +18,8 @@ export default function Home({ navigation }) {
   const [keyboardHeight, setKeyboardHeight] = useState(0); // Hauteur du clavier
   const scrollViewRef = useRef(null); // Référence pour scroller automatiquement
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(-20)).current;
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Démarrer avec l'opacité à 1 pour afficher immédiatement
+  const translateY = useRef(new Animated.Value(0)).current; // Position initiale à 0 pour éviter le délai
 
   const handleSearch = () => {
     if (searchQuery.trim() !== "") {
@@ -31,6 +30,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // Animer la disparition
       Animated.sequence([
         Animated.timing(fadeAnim, {
           toValue: 0,
@@ -43,10 +43,12 @@ export default function Home({ navigation }) {
           useNativeDriver: true,
         }),
       ]).start(() => {
+        // Changer le texte après l'animation de disparition
         setDynamicText((prevText) =>
           prevText === "nom de l'entreprise" ? "N° d'entreprise" : "nom de l'entreprise"
         );
 
+        // Animer l'apparition
         Animated.parallel([
           Animated.timing(fadeAnim, {
             toValue: 1,
@@ -60,9 +62,9 @@ export default function Home({ navigation }) {
           }),
         ]).start();
       });
-    }, 3000);
+    }, 3000); // Intervalle de 3 secondes pour changer le texte
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Nettoyage de l'intervalle lorsque le composant est démonté
   }, [fadeAnim, translateY]);
 
   useEffect(() => {
@@ -133,7 +135,6 @@ export default function Home({ navigation }) {
               />
             </View>
           </View>
-          {/* <Footer /> */}
         </ScrollView>
       </View>
     </KeyboardAvoidingView>
