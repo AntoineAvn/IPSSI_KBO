@@ -48,11 +48,16 @@ app.get('/api/enterprises/search', async (req, res) => {
     const isEnterpriseNumber = /^[0-9]{4}\.[0-9]{3}\.[0-9]{3}$/.test(query);
 
     let enterprises;
+    let totalEnterprises;
+
     if (isEnterpriseNumber) {
       // Recherche exacte sur enterpriseNumber avec pagination
       enterprises = await Enterprise.find({ enterpriseNumber: query })
                                     .skip(skip) // Ignorer les premiers résultats
                                     .limit(limit); // Limiter à 20 résultats
+
+      // Compter le nombre total d'entreprises correspondantes au numéro
+      totalEnterprises = await Enterprise.countDocuments({ enterpriseNumber: query });
     } else {
       // Recherche insensible à la casse sur enterpriseName avec pagination
       enterprises = await Enterprise.find({
@@ -60,13 +65,14 @@ app.get('/api/enterprises/search', async (req, res) => {
       })
       .skip(skip)
       .limit(limit);
+
+      // Compter le nombre total d'entreprises correspondant au nom
+      totalEnterprises = await Enterprise.countDocuments({
+        enterpriseName: { $regex: query, $options: 'i' }
+      });
     }
 
     console.log('Enterprises found:', enterprises);
-
-    const totalEnterprises = await Enterprise.countDocuments({
-      enterpriseName: { $regex: query, $options: 'i' }
-    });
 
     const totalPages = Math.ceil(totalEnterprises / limit);
 
@@ -81,22 +87,6 @@ app.get('/api/enterprises/search', async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la recherche.' });
   }
 });
-
-
-
-
-
-// app.get('/api/enterprise', async (req, res) => {
-//     try {
-//       console.log('Request received for /api/enterprise');
-//       const enterprise = await Enterprise.findOne(); // Récupérer une entreprise
-//       console.log('Enterprise found:', enterprise);
-//       res.json(enterprise);
-//     } catch (error) {
-//       console.error('Error fetching enterprise:', error); // Afficher l'erreur complète
-//       res.status(500).json({ error: 'Erreur lors de la récupération des entreprises' });
-//     }
-//   });
   
 
 // Démarrage du serveur
