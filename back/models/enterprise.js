@@ -16,8 +16,6 @@ const enterpriseSchema = new mongoose.Schema({
   activity: Array
 });
 
-// const Enterprise = mongoose.model('Enterprise', enterpriseSchema);
 const Enterprise = mongoose.model('Enterprise', enterpriseSchema, 'enterprise');
-
 
 module.exports = Enterprise;
