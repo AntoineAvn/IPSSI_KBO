@@ -37,26 +37,26 @@ export default function CompanyDetails({ route, navigation }) {
       />
 
       {/* Dénomination */}
-      <Text style={styles.title}>
+      <Text selectable={true} style={styles.title}>
         {company.enterpriseName || "Nom de l'entreprise indisponible"}
       </Text>
 
       {/* Informations générales */}
       <View style={styles.infoSection}>
-        <Text style={styles.sectionTitle}>Informations générales</Text>
-        <Text style={styles.infoItem}>
+        <Text selectable={true} style={styles.sectionTitle}>Informations générales</Text>
+        <Text selectable={true} style={styles.infoItem}>
           <Text style={styles.infoLabel}>Numéro d'enregistrement: </Text>
           {company.enterpriseNumber || "Non disponible"}
         </Text>
-        <Text style={styles.infoItem}>
+        <Text selectable={true} style={styles.infoItem}>
           <Text style={styles.infoLabel}>Forme légale: </Text>
           {company.info?.JuridicalForm || "Non disponible"}
         </Text>
-        <Text style={styles.infoItem}>
+        <Text selectable={true} style={styles.infoItem}>
           <Text style={styles.infoLabel}>Statut: </Text>
           {company.info?.Status || "Non disponible"}
         </Text>
-        <Text style={styles.infoItem}>
+        <Text selectable={true} style={styles.infoItem}>
           <Text style={styles.infoLabel}>Date de création: </Text>
           {formatDate(company.info?.StartDate)}
         </Text>
@@ -65,18 +65,18 @@ export default function CompanyDetails({ route, navigation }) {
       {/* Adresse */}
       {company.address && company.address.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Adresse</Text>
-          <Text style={styles.infoItem}>
+          <Text selectable={true} style={styles.sectionTitle}>Adresse</Text>
+          <Text selectable={true} style={styles.infoItem}>
             <Text style={styles.infoLabel}>Rue: </Text>
             {`${company.address[0].Street || "Non disponible"} ${
               company.address[0].HouseNumber || ""
             }`}
           </Text>
-          <Text style={styles.infoItem}>
+          <Text selectable={true} style={styles.infoItem}>
             <Text style={styles.infoLabel}>Commune: </Text>
             {company.address[0].Municipality || "Non disponible"}
           </Text>
-          <Text style={styles.infoItem}>
+          <Text selectable={true} style={styles.infoItem}>
             <Text style={styles.infoLabel}>Code Postal: </Text>
             {company.address[0].Zipcode || "Non disponible"}
           </Text>
@@ -86,22 +86,22 @@ export default function CompanyDetails({ route, navigation }) {
       {/* Activités */}
       {company.activity && company.activity.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Activités</Text>
+          <Text selectable={true} style={styles.sectionTitle}>Activités</Text>
           {company.activity.map((act, index) => (
             <View key={index} style={styles.activityItem}>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Groupe d'activité: </Text>
                 {act.ActivityGroup || "Non disponible"}
               </Text>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Version NACE: </Text>
                 {act.NaceVersion || "Non disponible"}
               </Text>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Code NACE: </Text>
                 {act.NaceCode || "Non disponible"}
               </Text>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Classification: </Text>
                 {act.Classification || "Non disponible"}
               </Text>
@@ -113,23 +113,23 @@ export default function CompanyDetails({ route, navigation }) {
       {/* Contact */}
       {company.contact && company.contact.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Contact</Text>
+          <Text selectable={true} style={styles.sectionTitle}>Contact</Text>
           {company.contact.map((cont, index) => (
             <View key={index}>
               {cont.ContactType === "Numéro de téléphone" && (
-                <Text style={styles.infoItem}>
+                <Text selectable={true} style={styles.infoItem}>
                   <Text style={styles.infoLabel}>Tél: </Text>
                   {cont.Value || "Non disponible"}
                 </Text>
               )}
               {cont.ContactType === "Adresse e-mail" && (
-                <Text style={styles.infoItem}>
+                <Text selectable={true} style={styles.infoItem}>
                   <Text style={styles.infoLabel}>Email: </Text>
                   {cont.Value || "Non disponible"}
                 </Text>
               )}
               {cont.ContactType === "Adresse web" && (
-                <Text style={styles.infoItem}>
+                <Text selectable={true} style={styles.infoItem}>
                   <Text style={styles.infoLabel}>Web: </Text>
                   {cont.Value || "Non disponible"}
                 </Text>
@@ -142,21 +142,21 @@ export default function CompanyDetails({ route, navigation }) {
       {/* Branches */}
       {company.branches && company.branches.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Branches</Text>
+          <Text selectable={true} style={styles.sectionTitle}>Branches</Text>
           {company.branches.map((branch, index) => (
             <View key={index} style={styles.branchItem}>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>ID de la branche: </Text>
                 {branch.branchId || "Non disponible"}
               </Text>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Date de début: </Text>
                 {formatDate(branch.StartDate)}
               </Text>
               {branch.address && branch.address.length > 0 && (
                 <>
-                  <Text style={styles.infoLabel}>Adresse:</Text>
-                  <Text style={styles.infoItem}>
+                  <Text selectable={true} style={styles.infoLabel}>Adresse:</Text>
+                  <Text selectable={true} style={styles.infoItem}>
                     {branch.address[0].Street}, {branch.address[0].HouseNumber},{" "}
                     {branch.address[0].Municipality}, {branch.address[0].Zipcode}
                   </Text>
@@ -170,21 +170,21 @@ export default function CompanyDetails({ route, navigation }) {
       {/* Établissements */}
       {company.establishments && company.establishments.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Établissements</Text>
+          <Text selectable={true} style={styles.sectionTitle}>Établissements</Text>
           {company.establishments.map((establishment, index) => (
             <View key={index} style={styles.establishmentItem}>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Numéro d'établissement: </Text>
                 {establishment.establishmentNumber || "Non disponible"}
               </Text>
-              <Text style={styles.infoItem}>
+              <Text selectable={true} style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Date de début: </Text>
                 {formatDate(establishment.StartDate)}
               </Text>
               {establishment.address && establishment.address.length > 0 && (
                 <>
-                  <Text style={styles.infoLabel}>Adresse:</Text>
-                  <Text style={styles.infoItem}>
+                  <Text selectable={true} style={styles.infoLabel}>Adresse:</Text>
+                  <Text selectable={true} style={styles.infoItem}>
                     {establishment.address[0].Street},{" "}
                     {establishment.address[0].HouseNumber},{" "}
                     {establishment.address[0].Municipality},{" "}
@@ -239,7 +239,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#555",
   },
-  // Nouveau style pour chaque bloc d'activité
   activityItem: {
     borderWidth: 1,
     borderColor: "#ddd",
