@@ -6,7 +6,7 @@ import {
   Keyboard,
   StyleSheet,
 } from "react-native";
-import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
+import SearchBar from "../components/SearchBar";
 
 // Fonction utilitaire pour formater la date
 const formatDate = (dateString) => {
@@ -25,8 +25,6 @@ export default function CompanyDetails({ route, navigation }) {
       navigation.navigate("SearchResults", { query: searchQuery });
     }
   };
-
-  console.log('Company details:', company.activity);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -85,12 +83,12 @@ export default function CompanyDetails({ route, navigation }) {
         </View>
       )}
 
-      {/* Activité */}
+      {/* Activités */}
       {company.activity && company.activity.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Activité</Text>
+          <Text style={styles.sectionTitle}>Activités</Text>
           {company.activity.map((act, index) => (
-            <View key={index}>
+            <View key={index} style={styles.activityItem}>
               <Text style={styles.infoItem}>
                 <Text style={styles.infoLabel}>Groupe d'activité: </Text>
                 {act.ActivityGroup || "Non disponible"}
@@ -141,24 +139,61 @@ export default function CompanyDetails({ route, navigation }) {
         </View>
       )}
 
-      {/* Branche */}
-      {company.branch && company.branch.address && (
+      {/* Branches */}
+      {company.branches && company.branches.length > 0 && (
         <View style={styles.infoSection}>
-          <Text style={styles.sectionTitle}>Adresse de la branche</Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Rue: </Text>
-            {`${company.branch.address.Street || "Non disponible"} ${
-              company.branch.address.HouseNumber || ""
-            }`}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Commune: </Text>
-            {company.branch.address.Municipality || "Non disponible"}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Code Postal: </Text>
-            {company.branch.address.Zipcode || "Non disponible"}
-          </Text>
+          <Text style={styles.sectionTitle}>Branches</Text>
+          {company.branches.map((branch, index) => (
+            <View key={index} style={styles.branchItem}>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>ID de la branche: </Text>
+                {branch.branchId || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Date de début: </Text>
+                {formatDate(branch.StartDate)}
+              </Text>
+              {branch.address && branch.address.length > 0 && (
+                <>
+                  <Text style={styles.infoLabel}>Adresse:</Text>
+                  <Text style={styles.infoItem}>
+                    {branch.address[0].Street}, {branch.address[0].HouseNumber},{" "}
+                    {branch.address[0].Municipality}, {branch.address[0].Zipcode}
+                  </Text>
+                </>
+              )}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Établissements */}
+      {company.establishments && company.establishments.length > 0 && (
+        <View style={styles.infoSection}>
+          <Text style={styles.sectionTitle}>Établissements</Text>
+          {company.establishments.map((establishment, index) => (
+            <View key={index} style={styles.establishmentItem}>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Numéro d'établissement: </Text>
+                {establishment.establishmentNumber || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Date de début: </Text>
+                {formatDate(establishment.StartDate)}
+              </Text>
+              {establishment.address && establishment.address.length > 0 && (
+                <>
+                  <Text style={styles.infoLabel}>Adresse:</Text>
+                  <Text style={styles.infoItem}>
+                    {establishment.address[0].Street},{" "}
+                    {establishment.address[0].HouseNumber},{" "}
+                    {establishment.address[0].Municipality},{" "}
+                    {establishment.address[0].Zipcode}
+                  </Text>
+                </>
+              )}
+            </View>
+          ))}
         </View>
       )}
     </ScrollView>
@@ -203,5 +238,30 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontWeight: "bold",
     color: "#555",
+  },
+  // Nouveau style pour chaque bloc d'activité
+  activityItem: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: "#f9f9f9",
+  },
+  branchItem: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: "#f2f2f2",
+  },
+  establishmentItem: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: "#e9f5ff",
   },
 });
