@@ -1,0 +1,45 @@
+# Docker Compose configuration file for your application
+
+services:
+  # Server service definition
+  server:
+    build:
+      context: .
+    environment:
+      - NODE_ENV='production'
+      - URL_MONGO=${URL_MONGO}
+    ports:
+      - 8080:8080
+    networks: 
+      - docker-project
+    depends_on:
+      - db  # Define the dependency on the db service
+
+  # MongoDB database service definition
+  db:
+    image: mongo  # You can replace this with the specific MongoDB version you need
+    container_name: mongo_container
+    volumes:
+      - mongo-data:/data/db  # Persistent storage for MongoDB
+    networks: 
+      - docker-project
+    ports:
+      - 27017:27017  # Exposing the default MongoDB port
+    command: >
+      mongod --auth --bind_ip_all
+    restart: always
+
+    # Healthcheck for MongoDB to ensure the service is healthy before the server starts
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# Volumes for persisting data
+volumes:
+  mongo-data:
+
+networks:
+  docker-project:
+    driver: bridge
