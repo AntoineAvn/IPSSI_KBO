@@ -19,6 +19,7 @@ export default function SearchResults({ route, navigation }) {
   const [loadingMore, setLoadingMore] = useState(false); // Pour charger plus de résultats
   const [hasMore, setHasMore] = useState(true); // Savoir s'il y a plus de résultats à charger
   const [error, setError] = useState(null); // Pour gérer les erreurs
+  const [totalResults, setTotalResults] = useState(0); // Stocker le nombre total de résultats
 
   const getBackendUrl = () => {
     const debuggerHost = Constants.expoConfig.hostUri; // Récupérer l'URL du metro bundler pour communiquer avec le backend
@@ -49,6 +50,9 @@ export default function SearchResults({ route, navigation }) {
       } else {
         setFilteredData((prevData) => [...prevData, ...data.enterprises]); // Ajouter les résultats à la fin
       }
+
+      // Stocker le nombre total de résultats
+      setTotalResults(data.totalEnterprises);
 
       // Vérifier s'il y a encore plus de résultats à charger
       setHasMore(pageNumber < data.totalPages);
@@ -94,6 +98,11 @@ export default function SearchResults({ route, navigation }) {
         handleSearch={handleSearch}
         placeholder="Rechercher à nouveau..."
       />
+
+      {/* Affichage du nombre total de résultats */}
+      <Text style={styles.totalResultsText}>
+        {`Total de résultats trouvés : ${totalResults}`}
+      </Text>
 
       <FlatList
         data={filteredData}
@@ -174,6 +183,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
+  },
+  totalResultsText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
   },
   noResultsText: {
     textAlign: "center",
