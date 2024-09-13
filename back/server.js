@@ -72,7 +72,16 @@ app.get('/api/enterprises/search', async (req, res) => {
       });
     }
 
-    console.log('Enterprises found:', enterprises);
+    // Inclure les branches et établissements pour chaque entreprise
+    const enterpriseDetails = await Promise.all(enterprises.map(async (enterprise) => {
+      const branches = await Branch.find({ enterpriseNumber: enterprise.enterpriseNumber });
+      const establishments = await Establishment.find({ enterpriseNumber: enterprise.enterpriseNumber });
+      return {
+        ...enterprise._doc,
+        branches,
+        establishments
+      };
+    }));
 
     const totalPages = Math.ceil(totalEnterprises / limit);
 
@@ -80,13 +89,14 @@ app.get('/api/enterprises/search', async (req, res) => {
       page,
       totalPages,
       totalEnterprises,
-      enterprises
+      enterprises: enterpriseDetails // Inclure les détails enrichis avec branches et établissements
     });
   } catch (error) {
     console.error('Error during search:', error);
     res.status(500).json({ error: 'Erreur lors de la recherche.' });
   }
 });
+
   
 
 // Démarrage du serveur

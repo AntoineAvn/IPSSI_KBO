@@ -146,6 +146,14 @@ export default function SearchResults({ route, navigation }) {
                 <Text style={styles.label}>Date de création: </Text>
                 {formatDate(item.info.StartDate)}
               </Text>
+
+              {/* Nombre d'établissements et de branches */}
+              <Text style={styles.cardText}>
+                <Text style={styles.label}>Établissements: </Text>
+                {item.establishments?.length || 0},{" "}
+                <Text style={styles.label}>Branches: </Text>
+                {item.branches?.length || 0}
+              </Text>
             </View>
           </TouchableOpacity>
         )}
