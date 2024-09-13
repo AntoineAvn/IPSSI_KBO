@@ -6,6 +6,13 @@
 #### Lancer le back
 ```node server.js```
 
+#### Reproduire la base de données (avec le parsing)
+1. Récupérer les CSV à l'adresse https://kbopub.economie.fgov.be/kbo-open-data
+2. Installer mongoDBcompass : https://www.mongodb.com/try/download/community
+3. Exécuter dans l'ordre les scripts qui sont dans back/scripts_parse_db avec cette commande pour éviter les erreur de mémoire JS :
+
+```node --max-old-space-size=8192 data.js```
+
 ---
 
 ### Projet de Développement d'une Application Web de Recherche et Consultation d'Entreprises Belges
