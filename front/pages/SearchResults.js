@@ -21,6 +21,12 @@ export default function SearchResults({ route, navigation }) {
   const [error, setError] = useState(null); // Pour gérer les erreurs
   const [totalResults, setTotalResults] = useState(0); // Stocker le nombre total de résultats
 
+  // Fonction utilitaire pour formater la date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString.split('-').reverse().join('-')); // Transformer la chaîne en un objet Date
+    return date.toLocaleDateString('fr-FR'); // Retourner la date formatée en français
+  };
+
   const getBackendUrl = () => {
     const debuggerHost = Constants.expoConfig.hostUri; // Récupérer l'URL du metro bundler pour communiquer avec le backend
     const ip = debuggerHost.split(':')[0]; // Extraire l'IP depuis debuggerHost
@@ -117,24 +123,28 @@ export default function SearchResults({ route, navigation }) {
             <View style={styles.cardContent}>
               <Text style={styles.companyName}>{item.enterpriseName}</Text>
               <Text style={styles.cardText}>
-                <Text style={styles.label}>Numéro d'enregistrement: </Text>
+                <Text style={styles.label}>Numéro d'entreprise: </Text>
                 {item.enterpriseNumber}
               </Text>
-              <Text style={styles.cardText}>
-                <Text style={styles.label}>Adresse: </Text>
-                {`${item.address.StreetFR}, ${item.address.HouseNumber}, ${item.address.MunicipalityFR}, ${item.address.Zipcode}`}
-              </Text>
-              <Text style={styles.cardText}>
-                <Text style={styles.label}>Forme légale: </Text>
-                {item.legalForm}
-              </Text>
+
+              {/* Adresse */}
+              {item.address && item.address.length > 0 && (
+                <Text style={styles.cardText}>
+                  <Text style={styles.label}>Adresse: </Text>
+                  {`${item.address[0].Street}, ${item.address[0].HouseNumber}, ${item.address[0].Municipality}, ${item.address[0].Zipcode}`}
+                </Text>
+              )}
+
+              {/* Statut */}
               <Text style={styles.cardText}>
                 <Text style={styles.label}>Statut: </Text>
-                {item.status}
+                {item.info.Status}
               </Text>
+
+              {/* Date de création */}
               <Text style={styles.cardText}>
                 <Text style={styles.label}>Date de création: </Text>
-                {item.creationDate}
+                {formatDate(item.info.StartDate)}
               </Text>
             </View>
           </TouchableOpacity>
