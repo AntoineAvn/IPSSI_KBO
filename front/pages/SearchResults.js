@@ -14,51 +14,75 @@ export default function SearchResults({ route, navigation }) {
   const { query } = route.params;
   const [searchQuery, setSearchQuery] = useState(query);
   const [filteredData, setFilteredData] = useState([]);
+  const [page, setPage] = useState(1); // Gérer la page actuelle
   const [loading, setLoading] = useState(true); // Pour afficher un indicateur de chargement
+  const [loadingMore, setLoadingMore] = useState(false); // Pour charger plus de résultats
+  const [hasMore, setHasMore] = useState(true); // Savoir s'il y a plus de résultats à charger
   const [error, setError] = useState(null); // Pour gérer les erreurs
+  const [totalResults, setTotalResults] = useState(0); // Stocker le nombre total de résultats
 
   const getBackendUrl = () => {
-    const debuggerHost = Constants.expoConfig.hostUri; // Récupérer l'URL du metro bundler pour communiquer le backend
-    // console.log('debuggerHost:', debuggerHost);
+    const debuggerHost = Constants.expoConfig.hostUri; // Récupérer l'URL du metro bundler pour communiquer avec le backend
     const ip = debuggerHost.split(':')[0]; // Extraire l'IP depuis debuggerHost
     return `http://${ip}:3000`; // Construire l'URL du backend
   };
 
-  useEffect(() => {
-    // Fonction pour envoyer la requête à l'API
-    const fetchData = async () => {
-      try {
-        setLoading(true); // Début du chargement
-
-        // Remplace l'URL par celle de ton backend (par exemple : http://localhost:3000/api/enterprises/search)
-        // const response = await fetch(`http://10.74.0.196:3000/api/enterprises/search?name=${searchQuery}`);
-        const backendUrl = getBackendUrl(); // Récupérer dynamiquement l'URL du backend
-        const response = await fetch(`${backendUrl}/api/enterprises/search?name=${searchQuery}`);
-
-
-        
-        if (!response.ok) {
-          throw new Error("Erreur lors de la récupération des données");
-        }
-
-        const data = await response.json(); // Parse la réponse JSON
-        setFilteredData(data); // Mettre à jour les données avec les résultats de l'API
-      } catch (err) {
-        setError(err.message); // Gérer l'erreur
-      } finally {
-        setLoading(false); // Fin du chargement
+  const fetchData = async (pageNumber) => {
+    try {
+      if (pageNumber === 1) {
+        setLoading(true); // Début du chargement pour la première page
+      } else {
+        setLoadingMore(true); // Chargement de plus de résultats
       }
-    };
 
-    fetchData();
-  }, [searchQuery]);
+      const backendUrl = getBackendUrl();
+      const response = await fetch(`${backendUrl}/api/enterprises/search?name=${searchQuery}&page=${pageNumber}`);
 
-  const handleSearch = () => {
-    // Mettre à jour la recherche lorsque l'utilisateur utilise la SearchBar
-    setSearchQuery(searchQuery);
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des données");
+      }
+
+      const data = await response.json();
+
+      // Ajouter les nouveaux résultats à la liste existante
+      if (pageNumber === 1) {
+        setFilteredData(data.enterprises); // Mettre à jour les résultats pour la première page
+      } else {
+        setFilteredData((prevData) => [...prevData, ...data.enterprises]); // Ajouter les résultats à la fin
+      }
+
+      // Stocker le nombre total de résultats
+      setTotalResults(data.totalEnterprises);
+
+      // Vérifier s'il y a encore plus de résultats à charger
+      setHasMore(pageNumber < data.totalPages);
+
+    } catch (err) {
+      setError(err.message); // Gérer l'erreur
+    } finally {
+      setLoading(false);
+      setLoadingMore(false); // Fin du chargement
+    }
   };
 
-  if (loading) {
+  useEffect(() => {
+    fetchData(1); // Charger la première page au début
+  }, [searchQuery]);
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasMore) {
+      setPage((prevPage) => prevPage + 1); // Incrémenter la page actuelle
+      fetchData(page + 1); // Charger la page suivante
+    }
+  };
+
+  const handleSearch = () => {
+    setPage(1); // Réinitialiser la page à 1 lors de la nouvelle recherche
+    setFilteredData([]); // Réinitialiser les résultats
+    fetchData(1); // Charger les nouvelles données
+  };
+
+  if (loading && page === 1) {
     return <ActivityIndicator size="large" color="#107aca" />;
   }
 
@@ -74,6 +98,11 @@ export default function SearchResults({ route, navigation }) {
         handleSearch={handleSearch}
         placeholder="Rechercher à nouveau..."
       />
+
+      {/* Affichage du nombre total de résultats */}
+      <Text style={styles.totalResultsText}>
+        {`Total de résultats trouvés : ${totalResults}`}
+      </Text>
 
       <FlatList
         data={filteredData}
@@ -113,6 +142,9 @@ export default function SearchResults({ route, navigation }) {
         ListEmptyComponent={() => (
           <Text style={styles.noResultsText}>Aucun résultat trouvé</Text>
         )}
+        onEndReached={handleLoadMore} // Charger plus de résultats quand on arrive en bas de la liste
+        onEndReachedThreshold={0.5} // Déclenchement quand il reste 50% de la liste à défiler
+        ListFooterComponent={loadingMore && <ActivityIndicator size="small" color="#107aca" />} // Indicateur de chargement à la fin de la liste
       />
     </View>
   );
@@ -151,6 +183,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
+  },
+  totalResultsText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
   },
   noResultsText: {
     textAlign: "center",

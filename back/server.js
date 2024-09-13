@@ -34,6 +34,10 @@ const Establishment = require('./models/establishment');  // Assure-toi d'import
 app.get('/api/enterprises/search', async (req, res) => {
   try {
     const query = req.query.name;
+    const page = parseInt(req.query.page) || 1; // Page actuelle, par défaut 1
+    const limit = 20; // Nombre de résultats par page
+    const skip = (page - 1) * limit; // Nombre de résultats à sauter
+
     if (!query) {
       return res.status(400).json({ error: 'Le paramètre de recherche "name" est requis.' });
     }
@@ -45,33 +49,39 @@ app.get('/api/enterprises/search', async (req, res) => {
 
     let enterprises;
     if (isEnterpriseNumber) {
-      // Recherche exacte sur enterpriseNumber
-      enterprises = await Enterprise.find({ enterpriseNumber: query });
+      // Recherche exacte sur enterpriseNumber avec pagination
+      enterprises = await Enterprise.find({ enterpriseNumber: query })
+                                    .skip(skip) // Ignorer les premiers résultats
+                                    .limit(limit); // Limiter à 20 résultats
     } else {
-      // Recherche insensible à la casse sur enterpriseName
+      // Recherche insensible à la casse sur enterpriseName avec pagination
       enterprises = await Enterprise.find({
         enterpriseName: { $regex: query, $options: 'i' }
-      });
+      })
+      .skip(skip)
+      .limit(limit);
     }
 
     console.log('Enterprises found:', enterprises);
 
-    const enterpriseDetails = await Promise.all(enterprises.map(async (enterprise) => {
-      const branches = await Branch.find({ enterpriseNumber: enterprise.enterpriseNumber });
-      const establishments = await Establishment.find({ enterpriseNumber: enterprise.enterpriseNumber });
-      return {
-        ...enterprise._doc,
-        branches,
-        establishments
-      };
-    }));
+    const totalEnterprises = await Enterprise.countDocuments({
+      enterpriseName: { $regex: query, $options: 'i' }
+    });
 
-    res.json(enterpriseDetails);
+    const totalPages = Math.ceil(totalEnterprises / limit);
+
+    res.json({
+      page,
+      totalPages,
+      totalEnterprises,
+      enterprises
+    });
   } catch (error) {
     console.error('Error during search:', error);
     res.status(500).json({ error: 'Erreur lors de la recherche.' });
   }
 });
+
 
 
 
