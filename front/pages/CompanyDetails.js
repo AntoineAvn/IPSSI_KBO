@@ -70,7 +70,9 @@ export default function CompanyDetails({ route, navigation }) {
           <Text style={styles.sectionTitle}>Adresse</Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Rue: </Text>
-            {`${company.address[0].Street || "Non disponible"} ${company.address[0].HouseNumber || ""}`}
+            {`${company.address[0].Street || "Non disponible"} ${
+              company.address[0].HouseNumber || ""
+            }`}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Commune: </Text>
@@ -116,14 +118,24 @@ export default function CompanyDetails({ route, navigation }) {
           <Text style={styles.sectionTitle}>Contact</Text>
           {company.contact.map((cont, index) => (
             <View key={index}>
-              <Text style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Type de contact: </Text>
-                {cont.ContactType || "Non disponible"}
-              </Text>
-              <Text style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Valeur du contact: </Text>
-                {cont.Value || "Non disponible"}
-              </Text>
+              {cont.ContactType === "Numéro de téléphone" && (
+                <Text style={styles.infoItem}>
+                  <Text style={styles.infoLabel}>Tél: </Text>
+                  {cont.Value || "Non disponible"}
+                </Text>
+              )}
+              {cont.ContactType === "Adresse e-mail" && (
+                <Text style={styles.infoItem}>
+                  <Text style={styles.infoLabel}>Email: </Text>
+                  {cont.Value || "Non disponible"}
+                </Text>
+              )}
+              {cont.ContactType === "Adresse web" && (
+                <Text style={styles.infoItem}>
+                  <Text style={styles.infoLabel}>Web: </Text>
+                  {cont.Value || "Non disponible"}
+                </Text>
+              )}
             </View>
           ))}
         </View>
@@ -135,7 +147,9 @@ export default function CompanyDetails({ route, navigation }) {
           <Text style={styles.sectionTitle}>Adresse de la branche</Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Rue: </Text>
-            {`${company.branch.address.Street || "Non disponible"} ${company.branch.address.HouseNumber || ""}`}
+            {`${company.branch.address.Street || "Non disponible"} ${
+              company.branch.address.HouseNumber || ""
+            }`}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Commune: </Text>
