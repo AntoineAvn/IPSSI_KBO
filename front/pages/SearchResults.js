@@ -89,7 +89,11 @@ export default function SearchResults({ route, navigation }) {
   };
 
   if (loading && page === 1) {
-    return <ActivityIndicator size="large" color="#107aca" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#107aca" />
+      </View>
+    );
   }
 
   if (error) {
@@ -173,6 +177,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5", // même fond que l'écran
   },
   card: {
     backgroundColor: "#fff",
