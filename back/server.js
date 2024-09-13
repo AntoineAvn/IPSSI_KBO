@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('cors'); // Importer le middleware CORS
 const app = express();
 const port = 3000; // Le port sur lequel ton serveur va tourner
+
+app.use(cors()); // Activer CORS pour toutes les routes
 
 const mongoose = require('mongoose');
 
