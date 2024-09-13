@@ -1,3 +1,13 @@
+### Lancer le projet 
+
+#### Lancer le front
+```npm start```
+
+#### Lancer le back
+```node server.js```
+
+---
+
 ### Projet de Développement d'une Application Web de Recherche et Consultation d'Entreprises Belges
 
 #### Contexte et Objectif
