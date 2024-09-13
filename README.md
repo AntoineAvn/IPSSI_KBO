@@ -75,3 +75,7 @@ X. **Notifications** : Envoyer des notifications aux utilisateurs lorsque leurs 
 - **Documentation Technique** : Un guide détaillant la configuration du système, l'architecture de l'application, et les instructions pour le déploiement.
 - **Mécanisme de Throttling** : Documentation sur l'implémentation de la gestion des limitations de requêtes et les résultats de tests de performance.
 
+#### Source inspiration 
+
+- https://www.pappers.be/fr/
+
