@@ -8,6 +8,13 @@ import {
 } from "react-native";
 import SearchBar from "../components/SearchBar"; // Importation de la SearchBar
 
+// Fonction utilitaire pour formater la date
+const formatDate = (dateString) => {
+  if (!dateString) return "Non disponible";
+  const date = new Date(dateString.split('-').reverse().join('-')); // Transformer la chaîne en objet Date
+  return date.toLocaleDateString('fr-FR'); // Retourner la date formatée en français
+};
+
 export default function CompanyDetails({ route, navigation }) {
   const { company } = route.params;
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +25,8 @@ export default function CompanyDetails({ route, navigation }) {
       navigation.navigate("SearchResults", { query: searchQuery });
     }
   };
+
+  console.log('Company details:', company.activity);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -31,7 +40,7 @@ export default function CompanyDetails({ route, navigation }) {
 
       {/* Dénomination */}
       <Text style={styles.title}>
-        {company.denomination?.Denomination || "Nom de l'entreprise indisponible"}
+        {company.enterpriseName || "Nom de l'entreprise indisponible"}
       </Text>
 
       {/* Informations générales */}
@@ -39,76 +48,84 @@ export default function CompanyDetails({ route, navigation }) {
         <Text style={styles.sectionTitle}>Informations générales</Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Numéro d'enregistrement: </Text>
-          {company.registrationNumber || "Non disponible"}
+          {company.enterpriseNumber || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Forme légale: </Text>
-          {company.legalForm || "Non disponible"}
+          {company.info?.JuridicalForm || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Statut: </Text>
-          {company.status || "Non disponible"}
+          {company.info?.Status || "Non disponible"}
         </Text>
         <Text style={styles.infoItem}>
           <Text style={styles.infoLabel}>Date de création: </Text>
-          {company.creationDate || "Non disponible"}
+          {formatDate(company.info?.StartDate)}
         </Text>
       </View>
 
       {/* Adresse */}
-      {company.address && (
+      {company.address && company.address.length > 0 && (
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Adresse</Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Rue: </Text>
-            {`${company.address.StreetFR || "Non disponible"} ${company.address.HouseNumber || ""}`}
+            {`${company.address[0].Street || "Non disponible"} ${company.address[0].HouseNumber || ""}`}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Commune: </Text>
-            {company.address.MunicipalityFR || "Non disponible"}
+            {company.address[0].Municipality || "Non disponible"}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Code Postal: </Text>
-            {company.address.Zipcode || "Non disponible"}
+            {company.address[0].Zipcode || "Non disponible"}
           </Text>
         </View>
       )}
 
       {/* Activité */}
-      {company.activity && (
+      {company.activity && company.activity.length > 0 && (
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Activité</Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Groupe d'activité: </Text>
-            {company.activity.ActivityGroup || "Non disponible"}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Version NACE: </Text>
-            {company.activity.NaceVersion || "Non disponible"}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Code NACE: </Text>
-            {company.activity.NaceCode || "Non disponible"}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Classification: </Text>
-            {company.activity.Classification || "Non disponible"}
-          </Text>
+          {company.activity.map((act, index) => (
+            <View key={index}>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Groupe d'activité: </Text>
+                {act.ActivityGroup || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Version NACE: </Text>
+                {act.NaceVersion || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Code NACE: </Text>
+                {act.NaceCode || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Classification: </Text>
+                {act.Classification || "Non disponible"}
+              </Text>
+            </View>
+          ))}
         </View>
       )}
 
       {/* Contact */}
-      {company.contact && (
+      {company.contact && company.contact.length > 0 && (
         <View style={styles.infoSection}>
           <Text style={styles.sectionTitle}>Contact</Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Type de contact: </Text>
-            {company.contact.ContactType || "Non disponible"}
-          </Text>
-          <Text style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Valeur du contact: </Text>
-            {company.contact.ContactValue || "Non disponible"}
-          </Text>
+          {company.contact.map((cont, index) => (
+            <View key={index}>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Type de contact: </Text>
+                {cont.ContactType || "Non disponible"}
+              </Text>
+              <Text style={styles.infoItem}>
+                <Text style={styles.infoLabel}>Valeur du contact: </Text>
+                {cont.Value || "Non disponible"}
+              </Text>
+            </View>
+          ))}
         </View>
       )}
 
@@ -118,11 +135,11 @@ export default function CompanyDetails({ route, navigation }) {
           <Text style={styles.sectionTitle}>Adresse de la branche</Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Rue: </Text>
-            {`${company.branch.address.StreetFR || "Non disponible"} ${company.branch.address.HouseNumber || ""}`}
+            {`${company.branch.address.Street || "Non disponible"} ${company.branch.address.HouseNumber || ""}`}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Commune: </Text>
-            {company.branch.address.MunicipalityFR || "Non disponible"}
+            {company.branch.address.Municipality || "Non disponible"}
           </Text>
           <Text style={styles.infoItem}>
             <Text style={styles.infoLabel}>Code Postal: </Text>
